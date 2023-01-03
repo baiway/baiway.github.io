@@ -1,0 +1,7 @@
+body {
+    background: yellow;     /* red, blue, yellow, etc. */
+    color: black;           /* ditto */
+    font-size: 20px;
+    font-weight: lighter;   /* lighter, normal, bold */ 
+    margin-top; 5px;
+}

@@ -1,6 +1,6 @@
 body {
-    background: yellow;     /* red, blue, yellow, etc. */
-    color: black;           /* ditto */
+    background: white;     /* background color: red, blue, yellow, etc. */
+    color: black;           /* text color */
     font-size: 20px;
     font-weight: lighter;   /* lighter, normal, bold */ 
     margin-top: 5px;

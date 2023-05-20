@@ -1,0 +1,17 @@
+{
+  "name": "baiway.github.io",
+  "version": "1.0.0",
+  "description": "Work-in-progress personal website. I'm currently working through [Codecademy's Front-end Web Development course](https://join.codecademy.com/learn/paths/front-end-engineer-career-path-b/) to better understand the basics of web development. I'll be developing this site in tandem.",
+  "main": "index.js",
+  "scripts": {
+    "start": "eleventy --serve",
+    "build-production": "eleventy",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@11ty/eleventy": "^2.0.1"
+  }
+}

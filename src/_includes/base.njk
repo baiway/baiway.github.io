@@ -28,9 +28,9 @@ templateEngineOverride: njk,md
   <link rel="stylesheet" href="/markdown.css">
   {% include "title-and-meta.njk" %}
 </head>
-<body class="wrap">
+<body>
   {% include "header.njk" %}
-  <main>
+  <main class="wrap">
     {{ content | safe }}
   </main>
   {% include 'footer.njk' %}

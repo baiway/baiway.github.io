@@ -1,5 +1,4 @@
 const { DateTime } = require("luxon");
-const katex = require("katex");
 const fs = require("fs");
 
 module.exports = function(eleventyConfig) {
@@ -36,15 +35,6 @@ module.exports = function(eleventyConfig) {
   // {{ post.Date | postDate }} when looping over files, as in src/blog/index.html 
   eleventyConfig.addFilter("postDate", (dateObj) => {
     return DateTime.fromJSDate(dateObj).setLocale("en-gb").toLocaleString(DateTime.DATE_FULL);
-  });
-  
-  // Define `latex` filter 
-  // See: https://benborgers.com/posts/eleventy-katex
-  eleventyConfig.addFilter("latex", (content) => {
-    return content.replace(/\$\$(.+?)\$\$/g, (_, equation) => {
-      const cleanEquation = equation.replace(/&lt;/g, "<").replace(/&gt;/g, ">");
-      return katex.renderToString(cleanEquation, { throwOnError: false });
-    });
   });
 
   // Return your Object options:

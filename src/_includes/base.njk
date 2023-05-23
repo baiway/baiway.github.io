@@ -28,12 +28,13 @@ templateEngineOverride: njk,md
   <link rel="icon" type="image/png" href="/favicon.png">
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/markdown.css">
+  <link rel="stylesheet" href="https://unpkg.com/katex@latest/dist/katex.min.css"/>
   {% include "title-and-meta.njk" %}
 </head>
 <body>
   {% include "header.njk" %}
   <main class="wrap">
-    {{ content | safe }}
+    {{ content | latex | safe }}
   </main>
   {% include 'footer.njk' %}
 </body>

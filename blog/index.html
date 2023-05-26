@@ -25,16 +25,22 @@
   <link rel="icon" type="image/png" href="/favicon.png">
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/markdown.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.css" integrity="sha384-3UiQGuEI4TTMaFmGIZumfRPtfKQ3trwQE2JgosJxCnGmQpL/lJdjpcHkaaFwHlcI" crossorigin="anonymous">
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.js" integrity="sha384-G0zcxDFp5LWZtDuRMnBkk3EphCK1lhEf4UEyEM693ka574TZGwo4IWwS6QLzM/2t" crossorigin="anonymous"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"
-    onload="renderMathInElement(document.body, {
-      delimiters : [
-        {left: '$$', right: '$$', display: true},
-        {left: '$', right: '$', display: false},
-      ]
-      });">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css" integrity="sha384-3UiQGuEI4TTMaFmGIZumfRPtfKQ3trwQE2JgosJxCnGmQpL/lJdjpcHkaaFwHlcI" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js" integrity="sha384-G0zcxDFp5LWZtDuRMnBkk3EphCK1lhEf4UEyEM693ka574TZGwo4IWwS6QLzM/2t" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@latest/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+  <script>
+    let opts = {
+      delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+      ],
+    };
+    document.addEventListener("DOMContentLoaded", function () {
+      renderMathInElement(document.body, opts);
+    });
   </script>
+
+  
   <link rel="author" href="https://twitter.com/BaileyCook"/><title>Blog</title>
 <meta name="blog" content="Bailey Cook's blog.">
 </head>
@@ -50,55 +56,21 @@
 </header>
 
   <main class="wrap">
-    <section id="post-list"><div class="post-row">
-      <p class="post-title">
-        <a href="/blog/_posts/test4/">
-          Test post 4
-        </a>
-      </p>
-      <p class="post-date">
-        23 May 2023
-      </p>
-      <p class="post-subtitle">
-        Can I get KaTeX to work? I'd love to be able to write about interesting equations such as $y=mx+c$.
-      </p>
-    </div><div class="post-row">
-      <p class="post-title">
-        <a href="/blog/_posts/test3/">
-          Test post 3
-        </a>
-      </p>
-      <p class="post-date">
-        20 May 2023
-      </p>
-      <p class="post-subtitle">
-        An interesting subtitle
-      </p>
-    </div><div class="post-row">
-      <p class="post-title">
-        <a href="/blog/_posts/test2/">
-          Test post 2
-        </a>
-      </p>
-      <p class="post-date">
-        30 April 2023
-      </p>
-      <p class="post-subtitle">
-        test... This is another test post. I'm including this one so I can see two different previews.
-      </p>
-    </div><div class="post-row">
-      <p class="post-title">
-        <a href="/blog/_posts/test/">
-          Test post
-        </a>
-      </p>
-      <p class="post-date">
-        18 April 2023
-      </p>
-      <p class="post-subtitle">
-        This is a test post. The purpose of this post is to test whether I wrote <code>/src/blog/index.html</code> correctly (and whether I understand how to use Nunjucks).
-      </p>
-    </div></section>
+    <section id="post-list">
+      <div class="post-row">
+        <p class="post-title">
+          <a href="/blog/posts/klimontovich-derivation/">
+            The Klimontovich Equation
+          </a>
+        </p>
+        <p class="post-date">
+          26 May 2023
+        </p>
+        <p class="post-subtitle">
+          The first in a series of posts on the kinetic theory of plasmas (also a means for me to get to grips with $\KaTeX$).
+        </p>
+      </div>
+    </section>
 
   </main>
   <footer class="wrap">

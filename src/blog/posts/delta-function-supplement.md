@@ -6,8 +6,6 @@ date: 2023-05-24
 keywords: delta function, proof, mathematics
 supplement: true
 tags: posts
-references:
-  - klimontovich-derivation
 ---
 
 Starting with the time derivative of the three-dimensional delta-function $\delta(\mathbf{x} - \mathbf{x}_i)$,

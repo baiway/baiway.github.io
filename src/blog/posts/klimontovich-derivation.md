@@ -1,6 +1,5 @@
 ---
 title: The Klimontovich Equation
-id: klimontovich-derivation
 subtitle: The first in a series of posts on the kinetic theory of plasmas (also a means for me to get to grips with $\KaTeX$).
 layout: blog-post.njk
 date: 2023-05-26
@@ -10,7 +9,7 @@ tags: posts
 ---
 This is the first of a series of posts in which I'll outline (my understanding of) the essential elements of the kinetic theory of plasmas. These notes are primarily for my personal benefit, but I've decided to publish them online in the hopes that they might assist other bewildered PhD students who happen to stumble upon them 😊. My aim with this series is to start with a the fully kinetic picture (the topic of this post), then introduce the concept of an ensemble average and a distribution function, derive the Vlasov and Fokker-Planck equations, discuss collision operators, and then slowly make my way toward gyrokinetic theory and plasma turbulence (my research focus). I'm only a first-year PhD student, so I don't really understand any of this in detail yet, but the idea is that by putting pen to paper (or rather, typing in a Markdown file), I'll consolidate these ideas over time. 
 
-With that said, I think a good place to start is the Klimontovich picture of kinetic theory. In a nutshell, this is just a fancy way of writing down the $N$-body problem. However, as we'll see, the structure of the Klimontovich equation is very similar to that of the Vlasov equation, even though they describe the evolution of two quite different things. In this picture, the Klimontovich _phase density_ (as in phase space density) for a system comprised of $N$ particles of a given species is given by
+With that said, I think a good place to start is the Klimontovich picture of kinetic theory \cite{klimontovich2013statistical, liboff2003kinetic}. In a nutshell, this is just a fancy way of writing down the $N$-body problem. However, as we'll see, the structure of the Klimontovich equation is very similar to that of the Vlasov equation, even though they describe the evolution of two quite different things. In this picture, the Klimontovich _phase density_ (as in phase space density) for a system comprised of $N$ particles of a given species is given by
 
 $$
 \begin{equation}
@@ -166,29 +165,6 @@ $$
 $$
 
 ### To-do:
+- ~~Add a bibliography~~
 - Okay, so what? What does each term mean?
 - What is the advantage of writing down the $N$-body problem in this way? 
-- Add a bibliography (references below)
-
-### References
-```
-@book{klimontovich2013statistical,
-  title={The Statistical Theory of Non-Equilibrium Processes in a Plasma: International Series of Monographs in Natural Philosophy, Vol. 9},
-  author={Klimontovich, Yu L},
-  volume={9},
-  year={2013},
-  publisher={Elsevier}
-}
-@book{liboff2003kinetic,
-  title={Kinetic theory: classical, quantum, and relativistic descriptions},
-  author={Liboff, Richard L},
-  year={2003},
-  publisher={Springer Science \& Business Media}
-}
-@book{lyu2014elementary,
-  title={基礎太空電漿物理學 (Elementary Space Plasma Physics)},
-  author={Lyu, Ling-Hsiao},
-  year={2014},
-  publisher={Airiti Press}
-}
-```

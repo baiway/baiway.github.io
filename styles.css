@@ -169,7 +169,7 @@ main {
 .article .figure .caption {
   padding-top: 15px;
   display: inline-block;
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.2em;
 }
 
@@ -188,11 +188,11 @@ main {
   width: 70px;
 }
 
-#bibliography {
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+.bibliography {
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
 }
 
-#bibliography .bibliography ol {
+#bibliography {
   padding-left: 15px;
   padding-top: 30px;
   font-size: 12px;

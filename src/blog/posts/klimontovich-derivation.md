@@ -7,9 +7,9 @@ keywords: kinetic theory, plasma physics
 supplement: false
 tags: posts
 ---
-This is the first of a series of posts in which I'll outline (my understanding of) the essential elements of the kinetic theory of plasmas. These notes are primarily for my personal benefit, but I've decided to publish them online in the hopes that they might assist other bewildered PhD students who happen to stumble upon them 😊. My aim with this series is to start with a the fully kinetic picture (the topic of this post), then introduce the concept of an ensemble average and a distribution function, derive the Vlasov and Fokker-Planck equations, discuss collision operators, and then slowly make my way toward gyrokinetic theory and plasma turbulence (my research focus). I'm only a first-year PhD student, so I don't really understand any of this in detail yet, but the idea is that by putting pen to paper (or rather, typing in a Markdown file), I'll consolidate these ideas over time. 
+This is the first of a series of posts in which I'll outline (my understanding of) the essential elements of the kinetic theory of plasmas. My aim with this series is to start with the fully kinetic picture (the topic of this post), then introduce the concept of an ensemble average and a distribution function, derive the Vlasov and Fokker-Planck equations, discuss collision operators, and then slowly make my way toward gyrokinetic theory and plasma turbulence (my research focus). These notes are primarily for my own benefit, but I've chosen to upload them here in the hopes that they might assist fellow bewildered PhD students who happen to stumble upon them.
 
-With that said, I think a good place to start is the Klimontovich picture of kinetic theory \cite{klimontovich2013statistical, liboff2003kinetic}. In a nutshell, this is just a fancy way of writing down the $N$-body problem. However, as we'll see, the structure of the Klimontovich equation is very similar to that of the Vlasov equation, even though they describe the evolution of two quite different things. In this picture, the Klimontovich _phase density_ (as in phase space density) for a system comprised of $N$ particles of a given species is given by
+With that said, I think a good place to start is the Klimontovich picture of kinetic theory \cite{klimontovich2013statistical, liboff2003kinetic}. In a nutshell, this is just a fancy way of writing down the $N$-body problem. However, as we'll see, the structure of the Klimontovich equation is very similar to the much more useful Vlasov equation, even though they describe the evolution of two quite different things. In this picture, the Klimontovich _phase space density_ $\mathcal{N}$ for a system comprised of $N$ particles of a particular species is given by
 
 $$
 \begin{equation}
@@ -17,7 +17,7 @@ $$
 \end{equation}
 $$
 
-where $\mathbf{x}_i(t)$ and $\mathbf{v}_i(t)$ are respectively the time-varying position and velocity of the $i$-th particle respectively. The normalisation of $\mathcal{N}$ is given by
+where $\mathbf{x}_i(t)$ and $\mathbf{v}_i(t)$ are the time-varying position and velocity of the $i$-th particle respectively. The normalisation of $\mathcal{N}$ is given by
 
 $$
 \begin{equation}
@@ -25,6 +25,8 @@ $$
   \sum_{i=1}^N\int \delta(\mathbf{x} - \mathbf{x}_i) \\, \delta(\mathbf{v} - \mathbf{v}_i) \\, \mathrm{d}^3\mathbf{x}\\,\mathrm{d}^3\mathbf{v} = N.
 \end{equation}
 $$
+
+[add picture of 1D phase space]
 
 The aim here is to obtain an equation that describes the time evolution of $\mathcal{N}$, so we'll take the time derivative of Equation $1$.
 
@@ -34,7 +36,7 @@ $$
 \end{equation}
 $$
 
-Taking the derivative inside the sum and applying the product rule then gives
+Next, we'll take the derivative inside the sum and apply the product rule to give
 
 $$
 \begin{equation}
@@ -47,16 +49,16 @@ $$
 \end{equation}
 $$
 
-We now use the chain rule to express the time derivatives of the delta-functions as (proof [here](/blog/posts/delta-function-supplement/))
+We can then use the chain rule to express the time derivatives of the delta-functions as
 
 $$
 \begin{align}
 \frac{\partial}{\partial t}\\,\delta(\mathbf{x} - \mathbf{x}_i) &= - \frac{\mathrm{d}\mathbf{x}_i}{\mathrm{d}t} \cdot \frac{\partial}{\partial \mathbf{x}} \\,\delta(\mathbf{x} - \mathbf{x}_i) \\\\
-\frac{\partial}{\partial t}\\,\delta(\mathbf{v} - \mathbf{v}_i) &= - \frac{\mathrm{d}\mathbf{v}_i}{\mathrm{d}t} \cdot \frac{\partial}{\partial \mathbf{v}} \\,\delta(\mathbf{v} - \mathbf{v}_i),
+\frac{\partial}{\partial t}\\,\delta(\mathbf{v} - \mathbf{v}_i) &= - \frac{\mathrm{d}\mathbf{v}_i}{\mathrm{d}t} \cdot \frac{\partial}{\partial \mathbf{v}} \\,\delta(\mathbf{v} - \mathbf{v}_i).
 \end{align}
 $$
 
-allowing Equation $4$ to be written
+For a proof of these relations, see the Appendix at the end of this post. This now allows Equation $4$ to be written as
 
 $$
 \begin{equation}
@@ -114,7 +116,7 @@ $$
 \end{align*}
 $$
 
-We also note that the $\delta(\mathbf{v}-\mathbf{v}_i)$ can be taken inside the $\partial/\partial\mathbf{v}$ deriviative, allowing identity $10$ to once again be applied to give
+Note that $\mathbf{E}$ and $\mathbf{B}$ are now written as functions of $\mathbf{x}$ instead of $\mathbf{x_i}$. We also note that the $\mathbf{v}_i$ in the cross product in Equation $9$ can be taken inside the $\partial/\partial\mathbf{v}$ deriviative, allowing identity $10$ to be applied once again to give
 
 $$
 \begin{aligned}
@@ -128,7 +130,7 @@ $$
 \end{aligned}
 $$
 
-Now we'll take the $\delta(\mathbf{v}-\mathbf{v}_i)$ inside the $\partial/\partial\mathbf{x}$ deriviative as it does not depend on $\mathbf{x}$, and likewise for the $\delta(\mathbf{x}-\mathbf{x}_i)$ to give
+Now we'll take the $\delta(\mathbf{v}-\mathbf{v}_i)$ inside the $\partial/\partial\mathbf{x}$ deriviative as it does not depend on $\mathbf{x}$, and likewise for the $\delta(\mathbf{x}-\mathbf{x}_i)$, to give
 
 $$
 \begin{aligned}
@@ -155,11 +157,11 @@ $$
 \end{aligned}
 $$
 
-and lastly, we identify the terms in the large square brackets as the phase density $\mathcal{N}$. Rearranging so that all of the terms are on one side, we arrive at the Klimontovich equation
+and lastly, we identify the terms in the large square brackets as the phase density $\mathcal{N}$. If we then rearrange so that all of the terms are on one side, we arrive at the Klimontovich equation:
 
 $$
 \begin{equation}
-  \frac{\partial\mathcal{N}}{\partial t} + \mathbf{v} \cdot \frac{\partial\mathcal{N}}{\partial\mathbf{x}} + \frac{q}{m}\left(\mathbf{E} + \mathbf{v}\times\mathbf{B}\right) \cdot \frac{\partial\mathcal{N}}{\partial\mathbf{v}} = 0
+  \frac{\partial\mathcal{N}}{\partial t} + \mathbf{v} \cdot \frac{\partial\mathcal{N}}{\partial\mathbf{x}} + \frac{q}{m}\left(\mathbf{E} + \mathbf{v}\times\mathbf{B}\right) \cdot \frac{\partial\mathcal{N}}{\partial\mathbf{v}} = 0.
  \tag{15}
 \end{equation}
 $$

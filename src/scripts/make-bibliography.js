@@ -7,28 +7,28 @@ module.exports = (content) => {
   const matches = content.matchAll(citationRegex);
 
   // Exit early if no references
-  // const firstMatch = matches.next();
-  // if (firstMatch.done) {
-  //   return content
-  // }
+  const matchesCopy = matches;
+  const firstMatch = matchesCopy.next();
+  if (firstMatch.done) {
+    return content
+  }
 
   // Read the contents of the references.bib file
   const references = readFileSync("./src/blog/references.bib").toString();
   const entries = parse(references);
+
   let citedKeys = {};
   let citationCounter = 1;
 
+  // Replace `\cite{...}` with in-text citations like [1], [1, 2], [1–N].
   for (const match of matches) {
     const keys = match[1].split(/\s*,\s*/);
     for (const key of keys) {
       const entry = entries[key];
-      // apply some formatting to each entry 
-      // write separate functions for this
       if (key in citedKeys == false) {
         citedKeys[key] = citationCounter;
         citationCounter++;
       }
-      
     }
     if (keys.length == 1) {
       content = content.replace(match[0].toString(), `[${citedKeys[keys[0]]}]`);
@@ -47,9 +47,9 @@ module.exports = (content) => {
     }
   }
 
+  // Print bibliography
   content = insertBibliography(content, citedKeys, entries);
 
-  // Return the modified content
   return content;
 };
 
@@ -57,7 +57,9 @@ const insertBibliography = (content, citedKeys, entries) => {
   let formattedEntries = {}
 
   for (const key in citedKeys) {
-    // formattedEntries[key] = `${entries[key]["author"]}`
+    // Display single-author publications as `J. Smith (2023)...`
+    // For two authors, display as `J. Smith and J. Bloggs (2023)...`
+    // For three or more, display as `J. Smith et al. (2023)...`
     let authors = entries[key]["author"]
     if (authors.length == 1) {
       authors = formatName(authors[0]["name"]);
@@ -74,6 +76,10 @@ const insertBibliography = (content, citedKeys, entries) => {
     const title = entries[key]["title"];
     const publisher = entries[key]["publisher"];
     formattedEntries[key] = `${authors} (${year}). ${title}. `;
+
+    // Apply different formatting to journals, books and websites
+    // This is slightly botched and may need to be revisited, but it works
+    // for my purposes as of 03/06/2023.
     if ("journal" in entries[key]) {
       const journal = entries[key]["journal"];
       const volume = entries[key]["volume"];
@@ -99,11 +105,13 @@ const insertBibliography = (content, citedKeys, entries) => {
     </ol>
   </section>
   `
-  const insertedContent = content.replace(regex, `$1\n${bibliography}`);
+  const insertedContent = content.replace(regex, bibliography);
   return insertedContent;
 };
 
 function formatName(fullName) {
+  // `bibtex-bibjson` reads full names given in BibTeX format as e.g. John Smith
+  // this function reformats all names to e.g. `J. Smith`.
   const names = fullName.split(' ');
   const lastName = names.pop();
 

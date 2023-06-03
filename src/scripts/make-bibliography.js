@@ -6,13 +6,6 @@ module.exports = (content) => {
   const citationRegex = /\\cite{([^}]*)}/g;
   const matches = content.matchAll(citationRegex);
 
-  // Exit early if no references
-  const matchesCopy = matches;
-  const firstMatch = matchesCopy.next();
-  if (firstMatch.done) {
-    return content
-  }
-
   // Read the contents of the references.bib file
   const references = readFileSync("./src/blog/references.bib").toString();
   const entries = parse(references);
@@ -24,7 +17,6 @@ module.exports = (content) => {
   for (const match of matches) {
     const keys = match[1].split(/\s*,\s*/);
     for (const key of keys) {
-      const entry = entries[key];
       if (key in citedKeys == false) {
         citedKeys[key] = citationCounter;
         citationCounter++;
@@ -105,7 +97,8 @@ const insertBibliography = (content, citedKeys, entries) => {
     </ol>
   </section>
   `
-  const insertedContent = content.replace(regex, bibliography);
+  const insertedContent = content.replace(regex, `$1${bibliography}`);
+
   return insertedContent;
 };
 

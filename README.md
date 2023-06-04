@@ -3,4 +3,5 @@ This is the source code for my (work-in-progress) personal website. I'm using [1
 
 Inspiration:
 - [Gregory Gunderson's research blog](https://gregorygundersen.com). I absolutely love the simple style of Gregory's site so I borrowed a lot of his CSS (see [this post](https://gregorygundersen.com/blog/2020/06/21/blog-theme/) and links therein).
+- [Hannah Tillim's personal website](https://www.hannahtillim.com). I'm also a big fan of Hannah's site. Her site plays a very similar role to my own, so I look a lot of inspiration from her site's style and structure.
 - [Maggie Appleton's digital garden](https://maggieappleton.com). I'm a huge fan of Maggie's writing and her approach to note-taking. 

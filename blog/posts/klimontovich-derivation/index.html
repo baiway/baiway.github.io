@@ -2,7 +2,7 @@
 <!doctype html>
 <html>
 <head>
-  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/markdown.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css" integrity="sha384-3UiQGuEI4TTMaFmGIZumfRPtfKQ3trwQE2JgosJxCnGmQpL/lJdjpcHkaaFwHlcI" crossorigin="anonymous">
@@ -57,7 +57,7 @@ education
   <main class="wrap">
     <section class="front-matter">
   <h1>The Klimontovich Equation</h1>
-  <h4>The first in a series of posts on the kinetic theory of plasmas (also a means for me to get to grips with $\KaTeX$).</h4>
+  <h4>Although it's not feasible to solve for any practical system, the Klimontovich equation equation is a good entry point into the kinetic theory of plasmas.</h4>
   <div class="bylines">
     <div id="publish-date">
       <h3>Published</h3>
@@ -65,37 +65,45 @@ education
     </div>
     <div id="last-modified">
       <h3>Last modified</h3>
-      <p>4 June 2023</p>
+      <p>6 June 2023</p>
     </div>
   </div>
   <div class="clear"></div>
 </section>
 <section class="article">
-  <p>This is the first of a series of posts in which I'll outline (my understanding of) the essential elements of the kinetic theory of plasmas. My aim with this series is to start with the fully kinetic picture (the topic of this post), then introduce the concept of an ensemble average and a distribution function, derive the Vlasov and Fokker-Planck equations, discuss collision operators, and then slowly make my way toward gyrokinetic theory and plasma turbulence (my research focus). These notes are primarily for my own benefit, but I've chosen to upload them here in the hopes that they might assist fellow bewildered PhD students who happen to stumble upon them.</p>
-<p>With that said, I think a good place to start is the Klimontovich picture of kinetic theory [1, 2]. In a nutshell, this is just a fancy way of writing down the $N$-body problem. However, as we'll see, the structure of the Klimontovich equation is very similar to the much more useful Vlasov equation, even though they describe the evolution of two quite different things. In this picture, the Klimontovich <em>phase space density</em> $\mathcal{N}$ for a system comprised of $N$ particles of a particular species is given by</p>
+  <p>This is the first of a series of posts in which I'll outline (my understanding of) the essential elements of the kinetic theory of plasmas. My aim with this series is to start with a fully kinetic picture (the topic of this post), then introduce the concept of an ensemble average and a distribution function, derive the Vlasov and Fokker-Planck equations, discuss collision operators, and then slowly make my way toward gyrokinetic theory and plasma turbulence (my research focus). I'm primarily writing these notes for my own benefit, but I've chosen to upload them here in the hopes that they might one day assist fellow bewildered PhD students who happen to stumble upon them.</p>
+<p>A good place to start with all this is the Klimontovich picture of kinetic theory [1]. This is a &quot;fully kinetic&quot; description of a plasma, which means it retains all the information about single particle orbits that you'd find in any introductary plasma physics textbook. As a result, the Klimontovich equation is completely general, which is nice, but it also means that it is not solvable for practical purposes. Still, pedagogically speaking, the Klimontovich equation is very useful because it serves as a useful starting point for the derivation of approximate equations (e.g. the Vlasov equation) that describe the time evolution of <em>average</em> properties of the plasma. In this post, I'll present a short derivation of the Klimontovich equation that largely follows the derivations given in the textbooks by Nicholson [2] and Liboff [3] (any mistakes here are my own though!).</p>
+<p>In the Klimontovich picture of kinetic theory, the phase space density $\mathcal{N_s}$ for a system of $N_s$ particles of species $s$ is given by</p>
 <p>$$
 \begin{equation}
-\mathcal{N}(\mathbf{x}, \mathbf{v}, t) = \sum_{i=1}^N \delta\left(\mathbf{x} - \mathbf{x}_i(t)\right) \delta\left(\mathbf{v} - \mathbf{v}_i(t)\right),
+\mathcal{N_s}(\mathbf{x}, \mathbf{v}, t) = \sum_{i=1}^N \delta\left(\mathbf{x} - \mathbf{x}_i(t)\right) \delta\left(\mathbf{v} - \mathbf{v}_i(t)\right),
 \end{equation}
 $$</p>
-<p>where $\mathbf{x}_i(t)$ and $\mathbf{v}_i(t)$ are the time-varying position and velocity of the $i$-th particle respectively. The normalisation of $\mathcal{N}$ is given by</p>
+<p>where $\mathbf{x}_i(t)$ and $\mathbf{v}_i(t)$ are the time-varying position and velocity of the $i$-th particle respectively. In the literature, $\mathbf{x}_i$ and $\mathbf{v}_i$ are referred to as the &quot;Lagrangian coordinates&quot; of the particle itself, whereas $\mathbf{x}$ and $\mathbf{v}$ are the &quot;Eulerian coordinates&quot; of the phase space. The normalisation of $\mathcal{N_s}$ is given by</p>
 <p>$$
 \begin{equation}
-\int \mathcal{N}(\mathbf{x}, \mathbf{v}) \, \mathrm{d}^3\mathbf{x}\,\mathrm{d}^3\mathbf{v} =
-\sum_{i=1}^N\int \delta(\mathbf{x} - \mathbf{x}_i) \, \delta(\mathbf{v} - \mathbf{v}_i) \, \mathrm{d}^3\mathbf{x}\,\mathrm{d}^3\mathbf{v} = N.
+\int \mathcal{N_s}(\mathbf{x}, \mathbf{v}) \, \mathrm{d}^3\mathbf{x}\,\mathrm{d}^3\mathbf{v} =
+\sum_{i=1}^N\int \delta(\mathbf{x} - \mathbf{x}_i) \, \delta(\mathbf{v} - \mathbf{v}_i) \, \mathrm{d}^3\mathbf{x}\,\mathrm{d}^3\mathbf{v} = N_s.
 \end{equation}
 $$</p>
-<p>[add picture of 1D phase space]</p>
-<p>The aim here is to obtain an equation that describes the time evolution of $\mathcal{N}$, so we'll take the time derivative of Equation $1$.</p>
+<p>A pictoral representation of $\mathcal{N_s}$ is shown in Figure 1.</p>
+<div class="figure">
+    <img src="/img/phase-space.svg" style="width: 45%; display: block; margin: 0 auto;"
+    alt="some alt text"/>
+    <div class="caption">
+        <span class="caption-label">Figure 1:</span> A pictoral representation of the phase space density $\mathcal{N_s}$ for a system with $N_s = 3$ particles. The phase space density is zero at all points except at the phase space locations of particles.
+    </div>
+</div>
+<p>The aim here is to obtain an equation that describes the time evolution of $\mathcal{N_s}$, so we'll take the time derivative of Equation $1$.</p>
 <p>$$
 \begin{equation}
-\frac{\partial \mathcal{N}}{\partial t} = \frac{\partial}{\partial t} \left[ \sum_i \delta(\mathbf{x} - \mathbf{x}_i) \, \delta(\mathbf{v} - \mathbf{v}_i) \right]
+\frac{\partial \mathcal{N_s}}{\partial t} = \frac{\partial}{\partial t} \left[ \sum_i \delta(\mathbf{x} - \mathbf{x}_i) \, \delta(\mathbf{v} - \mathbf{v}_i) \right]
 \end{equation}
 $$</p>
 <p>Next, we'll take the derivative inside the sum and apply the product rule to give</p>
 <p>$$
 \begin{equation}
-\frac{\partial N}{\partial t} = \sum_i
+\frac{\partial N_s}{\partial t} = \sum_i
 \left[
 \delta(\mathbf{v} - \mathbf{v}_i)\frac{\partial}{\partial t}\,\delta(\mathbf{x} - \mathbf{x}_i)
 +
@@ -113,7 +121,7 @@ $$</p>
 <p>For a proof of these relations, see the Appendix at the end of this post. This now allows Equation $4$ to be written as</p>
 <p>$$
 \begin{equation}
-\frac{\partial\mathcal{N}}{\partial t} = -\sum_i
+\frac{\partial\mathcal{N_s}}{\partial t} = -\sum_i
 \left[
 \delta(\mathbf{v} - \mathbf{v}_i)\frac{\mathrm{d}\mathbf{x}_i}{\mathrm{d}t} \cdot \frac{\partial}{\partial \mathbf{x}} \,\delta(\mathbf{x} - \mathbf{x}_i)
 +
@@ -132,7 +140,7 @@ $$</p>
 <p>where $\mathbf{E}(\mathbf{x}_i, t)$ and $\mathbf{B}(\mathbf{x}_i, t)$ are, respectively, the electric and magnetic fields at the $i$-th particle's position $\mathbf{x}_i$ at time $t$. Substituting Equation $8$ into $7$ then gives</p>
 <p>$$
 \begin{aligned}
-\frac{\partial\mathcal{N}}{\partial t} = -\sum_i
+\frac{\partial\mathcal{N_s}}{\partial t} = -\sum_i
 \bigg[
 &amp; \delta (\mathbf{v} - \mathbf{v}_i)\mathbf{v} \cdot \frac{\partial}{\partial \mathbf{x}} \,\delta(\mathbf{x} - \mathbf{x}_i) \\
 &amp; + \delta(\mathbf{x} - \mathbf{x}_i)\frac{q}{m}\left[
@@ -161,7 +169,7 @@ $$</p>
 <p>Note that $\mathbf{E}$ and $\mathbf{B}$ are now written as functions of $\mathbf{x}$ instead of $\mathbf{x_i}$. We also note that the $\mathbf{v}_i$ in the cross product in Equation $9$ can be taken inside the $\partial/\partial\mathbf{v}$ deriviative, allowing identity $10$ to be applied once again to give</p>
 <p>$$
 \begin{aligned}
-\frac{\partial\mathcal{N}}{\partial t} = -\sum_i
+\frac{\partial\mathcal{N_s}}{\partial t} = -\sum_i
 \bigg[
 &amp; \delta (\mathbf{v} - \mathbf{v}_i)\mathbf{v} \cdot \frac{\partial}{\partial \mathbf{x}} \,\delta(\mathbf{x} - \mathbf{x}_i) \\
 &amp; + \delta(\mathbf{x} - \mathbf{x}_i)\frac{q}{m}\left[
@@ -173,7 +181,7 @@ $$</p>
 <p>Now we'll take the $\delta(\mathbf{v}-\mathbf{v}_i)$ inside the $\partial/\partial\mathbf{x}$ deriviative as it does not depend on $\mathbf{x}$, and likewise for the $\delta(\mathbf{x}-\mathbf{x}_i)$, to give</p>
 <p>$$
 \begin{aligned}
-\frac{\partial\mathcal{N}}{\partial t} = -\sum_i
+\frac{\partial\mathcal{N_s}}{\partial t} = -\sum_i
 \bigg[
 &amp; \mathbf{v} \cdot \frac{\partial}{\partial \mathbf{x}} \left[\delta(\mathbf{x} - \mathbf{x}_i)\delta(\mathbf{v} - \mathbf{v}_i)\right] \\
 &amp; + \frac{q}{m}\left[
@@ -185,7 +193,7 @@ $$</p>
 <p>Shifting the sum then gives</p>
 <p>$$
 \begin{aligned}
-\frac{\partial\mathcal{N}}{\partial t} = -
+\frac{\partial\mathcal{N_s}}{\partial t} = -
 &amp; \mathbf{v} \cdot \frac{\partial}{\partial \mathbf{x}} \left[\sum_i\delta(\mathbf{x} - \mathbf{x}_i)\delta(\mathbf{v} - \mathbf{v}_i)\right] \\
 &amp; - \frac{q}{m}\left[
 \mathbf{E}(\mathbf{x}, t) + \mathbf{v} \times \mathbf{B}(\mathbf{x}, t)
@@ -193,24 +201,35 @@ $$</p>
 \tag{14}
 \end{aligned}
 $$</p>
-<p>and lastly, we identify the terms in the large square brackets as the phase density $\mathcal{N}$. If we then rearrange so that all of the terms are on one side, we arrive at the Klimontovich equation:</p>
+<p>and lastly, we identify the terms in the large square brackets as the phase density $\mathcal{N_s}$. If we then rearrange so that all of the terms are on one side, we arrive at the Klimontovich equation:</p>
 <p>$$
 \begin{equation}
-\frac{\partial\mathcal{N}}{\partial t} + \mathbf{v} \cdot \frac{\partial\mathcal{N}}{\partial\mathbf{x}} + \frac{q}{m}\left(\mathbf{E} + \mathbf{v}\times\mathbf{B}\right) \cdot \frac{\partial\mathcal{N}}{\partial\mathbf{v}} = 0.
+\frac{\partial\mathcal{N_s}}{\partial t} + \mathbf{v} \cdot \frac{\partial\mathcal{N_s}}{\partial\mathbf{x}} + \frac{q}{m}\left(\mathbf{E} + \mathbf{v}\times\mathbf{B}\right) \cdot \frac{\partial\mathcal{N_s}}{\partial\mathbf{v}} = 0.
 \tag{15}
 \end{equation}
 $$</p>
-<h3>To-do:</h3>
-<ul>
-<li><s>Add a bibliography</s></li>
-<li>Okay, so what? What does each term mean?</li>
-<li>What is the advantage of writing down the $N$-body problem in this way?</li>
-</ul>
+<p>The Klimontovich equation, together with Maxwell's equations, constitute an exact description of a plasma. Given the initial positions and velocities of each of the particles, the initial density $\mathcal{N_s}(\mathbf{x}, \mathbf{v}, t=0)$ is given exactly by Equation $1$. The initial fields $\mathbf{E}$ and $\mathbf{B}$ are then chosen to be consistent with Maxwell's equations. With these initial conditions, the problem is completely deterministic. In practice, however, no one ever carries out this procedure. The Klimontovich equation contains every one of the exact single particle orbits. This is far more information than we want or need. It also requires the initial position and velocity of every particle, which is more information than we have! What we really want is information about certain <em>average</em> properties of the plasma. We do not really care about all of the individual electromagnetic fields contributed by the individual charges. What we do care about is the average long-range electric field, which might exist over many thousands or millions of interparticle spacings. The usefulness of the Klimontovich equation comes from its role as a starting point in the derivation of the equations that describe these more useful average properties of a plasma.</p>
+<p>We end by noting that the Klimontovich equation can be thought of as a statement of incompressibility of the &quot;substance&quot; $\mathcal{N_s}(\mathbf{x}, \mathbf{v}, t)$ as it moves about in phase space. This can be seen be defining the generalised convective deriative as</p>
+<p>$$
+\begin{equation}
+\frac{\mathrm{D}}{\mathrm{D}t} = \frac{\partial}{\partial t} + \mathbf{v}\cdot\frac{\partial}{\partial\mathbf{x}} + \mathbf{a}\cdot\frac{\partial}{\partial\mathbf{v}},
+\tag{16}
+\end{equation}
+$$</p>
+<p>allowing the Klimontovich equation to be stated as simply</p>
+<p>$$
+\begin{equation}
+\frac{\mathrm{D}\mathcal{N_s}}{\mathrm{D}t} = 0
+\tag{17}
+\end{equation}
+$$</p>
+<p>i.e. the phase density of particles of species $s$ is constant in time.</p>
 
 </section>
   <section class="bibliography">
     <ol id="bibliography">
-    <li>Y. L. Klimontovich (2013). The Statistical Theory of Non-Equilibrium Processes in a Plasma: International Series of Monographs in Natural Philosophy, Vol. 9. <i>Elsevier</i>.</li>
+    <li>Y. L. Klimontovich (1967). The Statistical Theory of Non-Equilibrium Processes in a Plasma: International Series of Monographs in Natural Philosophy, Vol. 9. <i>Elsevier</i>.</li>
+<li>D. R. Nicholson (1983). Introduction to plasma theory. <i>Wiley New York</i>.</li>
 <li>R. L. Liboff (2003). Kinetic theory: classical, quantum, and relativistic descriptions. <i>Springer Science and Business Media</i>.</li>
     </ol>
   </section>

@@ -6,7 +6,7 @@ module.exports = function(eleventyConfig) {
   //Pass through files
   eleventyConfig.addPassthroughCopy("./src/styles.css");  
   eleventyConfig.addPassthroughCopy("./src/markdown.css");
-  eleventyConfig.addPassthroughCopy({"./img/favicon.png": "/favicon.png"});
+  eleventyConfig.addPassthroughCopy("./img/");
   eleventyConfig.addPassthroughCopy("./src/CNAME");
 
   // Add {% year %} shortcode (useful for setting copyright dates)

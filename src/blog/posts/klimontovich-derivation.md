@@ -7,9 +7,9 @@ keywords: kinetic theory, plasma physics
 publish: true
 tags: posts
 ---
-This is the first of a series of posts in which I'll outline (my understanding of) the essential elements of the kinetic theory of plasmas. My aim with this series is to start with a fully kinetic picture (the topic of this post), then introduce the concept of an ensemble average and a distribution function, derive the Vlasov and Fokker-Planck equations, discuss collision operators, and then slowly make my way toward gyrokinetic theory and plasma turbulence (my research focus). I'm primarily writing these notes for my own benefit, but I've chosen to upload them here in the hopes that they might one day assist fellow bewildered PhD students who happen to stumble upon them.
+This is the first of a series of posts on the kinetic theory of plasmas. My aim with this series is to start with a fully kinetic picture (the topic of this post), then introduce the concept of an ensemble average and a distribution function, derive the ensemble-averaged kinetic (i.e. Vlasov) equation, discuss collision operators, then provide a comprehensive derivation of gyrokinetic theory and explan its use as a tool for modelling plasma turbulence (my research focus). I'm primarily writing these notes for my own benefit, but I've chosen to upload them here in the hopes that they might one day assist fellow bewildered PhD students who happen to stumble upon them.
 
-A good place to start with all this is the Klimontovich picture of kinetic theory \cite{klimontovich1967statistical}. This is a "fully kinetic" description of a plasma, which means it retains all the information about single particle orbits that you'd find in any introductary plasma physics textbook. As a result, the Klimontovich equation is completely general, which is nice, but it also means that it is not solvable for practical purposes. Still, pedagogically speaking, the Klimontovich equation is very useful because it serves as a useful starting point for the derivation of approximate equations (e.g. the Vlasov equation) that describe the time evolution of *average* properties of the plasma. In this post, I'll present a short derivation of the Klimontovich equation that largely follows the derivations given in the textbooks by Nicholson \cite{nicholson1983introduction} and Liboff \cite{liboff2003kinetic} (any mistakes here are my own though!). 
+A good place to start with all this is the Klimontovich picture of kinetic theory \cite{klimontovich1967statistical}. This is a "fully kinetic" description of a plasma, which means it retains all the information about single particle orbits that you'd find in any introductary plasma physics textbook. As a result, the Klimontovich equation is completely general, which is nice, but it also means that it is not generally possible to evolve it for any reasonably sized plasma. Still, pedagogically speaking, the Klimontovich equation is very useful because it serves as a useful starting point for the derivation of approximate equations (e.g. the Vlasov equation) that describe the time evolution of *average* properties of the plasma. In this post, I'll present a short derivation of the Klimontovich equation that follows the derivation given in Nicholson's textbook \cite{nicholson1983introduction}. 
 
 In the Klimontovich picture of kinetic theory, the phase space density $\mathcal{N_s}$ for a system of $N_s$ particles of species $s$ is given by
 
@@ -23,8 +23,8 @@ where $\mathbf{x}_i(t)$ and $\mathbf{v}_i(t)$ are the time-varying position and 
 
 $$
 \begin{equation}
-\int \mathcal{N_s}(\mathbf{x}, \mathbf{v}) \\, \mathrm{d}^3\mathbf{x}\\,\mathrm{d}^3\mathbf{v} = 
-  \sum_{i=1}^N\int \delta(\mathbf{x} - \mathbf{x}_i) \\, \delta(\mathbf{v} - \mathbf{v}_i) \\, \mathrm{d}^3\mathbf{x}\\,\mathrm{d}^3\mathbf{v} = N_s.
+\int \mathcal{N_s}(\mathbf{x}, \mathbf{v}) \\, \mathrm{d}\mathbf{x}\\,\mathrm{d}\mathbf{v} = 
+  \sum_{i=1}^N\int \delta(\mathbf{x} - \mathbf{x}_i) \\, \delta(\mathbf{v} - \mathbf{v}_i) \\, \mathrm{d}\mathbf{x}\\,\mathrm{d}\mathbf{v} = N_s.
 \end{equation}
 $$
 
@@ -197,3 +197,81 @@ $$
 $$
 
 i.e. the phase density of particles of species $s$ is constant in time. 
+
+## Appendix
+Here we use the chain rule to prove relations $5$ and $6$. Starting with the time derivative of the three-dimensional delta-function $\delta(\mathbf{x} - \mathbf{x}_i)$,
+
+$$
+\begin{align*}
+\frac{\partial}{\partial t}\\, \delta(\mathbf{x} - \mathbf{x}_i)
+  &= \frac{\partial}{\partial t}\left[\delta(x - x_i) \\, \delta(y - y_i) \\, \delta(z - z_i) \right] \\\\
+  &= \frac{\partial}{\partial t}\left[\delta(x - x_i)\right] \delta(y - y_i) \\, \delta(z - z_i) \\\\
+  &\quad + \delta(x - x_i) \frac{\partial}{\partial t}\left[\delta(y - y_i)\right] \delta(z - z_i) \\\\
+  &\quad + \delta(x - x_i) \\, \delta(y - y_i) \frac{\partial}{\partial t}\left[\delta(z - z_i)\right] \tag{18}
+\end{align*}
+$$
+
+To evaluate the time derivatives, we'll use the following trick. Let $f$ be a functional of function $W(x, t)$, i.e. $f = f[W(x, t)]$. By the chain rule,
+
+$$
+\begin{equation*}
+\frac{\partial f}{\partial t} = \frac{\mathrm{d}f}{\mathrm{d}W}\frac{\partial W}{\partial t}. \tag{19}
+\end{equation*}
+$$
+
+If $\partial W/\partial x = 1$, then
+
+$$
+\begin{equation*}
+\frac{\partial f}{\partial x} = \frac{\mathrm{d}f}{\mathrm{d}W}\frac{\partial W}{\partial x} = \frac{\mathrm{d}f}{\mathrm{d}W}. \tag{20}
+\end{equation*}
+$$
+
+Thus, for $\partial W/\partial x = 1$, we have
+
+$$
+\begin{equation*}
+\frac{\partial f}{\partial t} = \frac{\mathrm{d}f}{\mathrm{d}W}\frac{\partial W}{\partial t} = \frac{\partial f}{\partial x}\frac{\partial W}{\partial t}. \tag{21}
+\end{equation*}
+$$
+
+Now, returning to the problem at hand, we can identify $\delta \rightarrow f$ and $W \rightarrow x - x_i(t)$. Therefore, the time derivative of the delta-function can be written
+
+$$
+\begin{equation*}
+\frac{\partial}{\partial t}\\,\delta(x - x_i) 
+= \frac{\partial\delta(x - x_i)}{\partial x}\frac{\partial\delta(x - x_i)}{\partial t} 
+= \frac{\partial\delta(x - x_i)}{\partial x}\left(-\frac{\mathrm{d} x_i}{\mathrm{d}t}\right). \tag{22}
+\end{equation*}
+$$
+
+Using the analogous expressions for the time derivatives of the $y$ and $z$ delta-functions, Equation $1$ can be written as
+
+$$
+\begin{align*}
+\frac{\partial}{\partial t}\\,\delta(\mathbf{x} - \mathbf{x}_i)
+  &= -\frac{\partial\delta(x - x_i)}{\partial x}\frac{\mathrm{d} x_i}{\mathrm{d}t} \delta(y - y_i) \\, \delta(z - z_i) \\\\
+  &\quad - \delta(x - x_i) \frac{\partial\delta(y - y_i)}{\partial y}\frac{\mathrm{d} y_i}{\mathrm{d}t} \delta(z - z_i) \\\\
+  &\quad - \delta(x - x_i) \\, \delta(y - y_i) \frac{\partial\delta(z - z_i)}{\partial z}\frac{\mathrm{d} z_i}{\mathrm{d}t} \\\\ 
+  &= - \frac{\mathrm{d}\mathbf{x}_i}{\mathrm{d}t} \cdot \frac{\partial}{\partial \mathbf{x}} \\,\delta(\mathbf{x} - \mathbf{x}_i), \tag{23}
+\end{align*}
+$$
+
+where
+
+$$
+\begin{equation*}
+ \frac{\mathrm{d}\mathbf{x}_i}{\mathrm{d}t} = \hat{x}\frac{\mathrm{d}x_i}{\mathrm{d}t} + \hat{y}\frac{\mathrm{d}y_i}{\mathrm{d}t} + \hat{z}\frac{\mathrm{d}z_i}{\mathrm{d}t}
+ \tag{24}
+\end{equation*}
+$$
+
+and 
+
+$$
+\begin{equation*}
+\frac{\partial}{\partial \mathbf{x}} \\,\delta(\mathbf{x} - \mathbf{x}_i) 
+  = \left(\hat{x}\frac{\partial}{\partial x} + \hat{y}\frac{\partial}{\partial y} + \hat{x}\frac{\partial}{\partial z}\right)
+  \left[\delta(x - x_i) \\, \delta(y - y_i) \\, \delta(z - z_i) \right]. \tag{25}
+\end{equation*}
+$$

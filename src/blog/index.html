@@ -5,7 +5,7 @@ tag: blog-page
 ---
 <section id="post-list">
   {%- for post in collections.posts | reverse -%}
-    {% if post.data.supplement != true %}
+    {% if post.data.publish = true %}
       <div class="post-row">
         <p class="post-title">
           <a href="{{ post.url }}">

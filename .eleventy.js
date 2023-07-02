@@ -6,6 +6,7 @@ module.exports = function(eleventyConfig) {
   //Pass through files
   eleventyConfig.addPassthroughCopy("./src/styles.css");  
   eleventyConfig.addPassthroughCopy("./src/markdown.css");
+  eleventyConfig.addPassthroughCopy("./src/testimonial-theme.css");
   eleventyConfig.addPassthroughCopy("./img/");
   eleventyConfig.addPassthroughCopy("./src/CNAME");
 

@@ -4,7 +4,7 @@ subtitle: Proofs of some of the results used in the derivation of the Klimontovi
 layout: blog-post.njk
 date: 2023-05-24
 keywords: delta function, proof, mathematics
-supplement: true
+publish: false
 tags: posts
 ---
 

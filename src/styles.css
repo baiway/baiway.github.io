@@ -213,13 +213,33 @@ main {
   color: rgba(0, 0, 0, 0.5);
 }
 
+p.copyright{
+  width: 100%;
+  top: 50px;
+}
+
+.testimonials {
+  display: flex;
+  justify-content: space-between;
+}
+
+.testimonial {
+  flex-basis: calc(50% - 4px); /* Two testimonials with 8px separation */
+  height: 100px;
+  background-color: black;
+}
+
 @media screen and (max-device-width: 700px) {
   body {
     margin: 0 7px;
   }
-}
 
-p.copyright{
-  width: 100%;
-  top: 50px;
+  .testimonials {
+    flex-direction: column;
+  }
+
+  .testimonial {
+    flex-basis: 100%; /* Single testimonial to fill the screen width */
+    margin-bottom: 8px;
+  }
 }

@@ -14,6 +14,7 @@
   "dependencies": {
     "@11ty/eleventy": "^2.0.1",
     "bibtex-bibjson": "^0.2.0",
+    "blaze-slider": "^1.9.3",
     "luxon": "^3.3.0"
   }
 }

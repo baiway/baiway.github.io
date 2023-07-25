@@ -4,7 +4,7 @@ subtitle: Although it's not feasible to solve for any practical system, the Klim
 layout: blog-post.njk
 date: 2023-05-26
 keywords: kinetic theory, plasma physics
-publish: true
+publish: false
 tags: posts
 ---
 This is the first of a series of posts on the kinetic theory of plasmas. My aim with this series is to start with a fully kinetic picture (the topic of this post), then introduce the concept of an ensemble average and a distribution function, derive the ensemble-averaged kinetic (i.e. Vlasov) equation, discuss collision operators, then provide a comprehensive derivation of gyrokinetic theory and explan its use as a tool for modelling plasma turbulence (my research focus). I'm primarily writing these notes for my own benefit, but I've chosen to upload them here in the hopes that they might one day assist fellow bewildered PhD students who happen to stumble upon them.

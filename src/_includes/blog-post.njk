@@ -3,17 +3,30 @@ layout: "base.njk"
 ---
 <section class="front-matter">
   <h1>{{ title }}</h1>
-  <h4>{{ subtitle | safe }}</h4>
+  {%- if subtitle %}
+  <p class="post-subtitle">{{ subtitle | mdInline | safe }}</p>
+  {%- endif %}
   <div class="bylines">
+    {%- if date %}
     <div id="publish-date">
       <h3>Published</h3>
-      <p>{{ page.date | postDate }}</p>
+      <p><time datetime="{{ date | dateISO }}">{{ date | dateDisplay }}</time></p>
     </div>
+    {%- endif %}
+    {%- if modified and (modified | dateISO) != (date | dateISO) %}
     <div id="last-modified">
       <h3>Last modified</h3>
-      <p>{{ page | fileLastModifiedDate | postDate }}</p>
+      <p><time datetime="{{ modified | dateISO }}">{{ modified | dateDisplay }}</time></p>
     </div>
+    {%- endif %}
   </div>
+  {%- if topics and topics.length %}
+  <div class="post-topics">
+    {%- for topic in topics -%}
+    <span class="post-topic">{{ topic }}</span>
+    {%- endfor -%}
+  </div>
+  {%- endif %}
   <div class="clear"></div>
 </section>
 <section class="article">

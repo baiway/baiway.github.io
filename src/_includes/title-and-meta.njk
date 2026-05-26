@@ -1,39 +1,13 @@
 <link rel="author" href="https://twitter.com/BaileyCook"/>
-
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<meta name="keywords" content="
-plasma, 
-physics, 
-phd,
-blog, 
-magnetic confinement fusion, 
-MCF,
-computational physics,
-programming,
-Python,
-Fortran,
-York,
-University of York,
-Fusion CDT,
-tutoring,
-teaching,
-education
-">
-
-{%- if tag == "home-page" -%}
-<title>Bailey Cook</title>
-<meta name="description" content="Bailey is a PhD student at the University of York (Fusion CDT) studying turbulence in magnetically confined plasmas. He is also a private tutor.">
-{%- endif -%}
-{%- if tag == "about-page" -%}
-<title>About</title>
-<meta name="description" content="About page.">
-{%- endif -%}
-{%- if tag == "tutoring" -%}
-<title>Tutoring</title>
-<meta name="description" content="I teach KS3, KS4 and post-16 Physics, Maths and Computer science (both online and face-to-face). I have experience with all UK exam boards. I also support students with university applications, including personal statement advice and helping students prepare for interviews and admissions tests such as the PAT, ECAA and NSAA. In addition, I have helped students pass scholarship examinations for top independent schools such as Eton and Westminster.">
-{%- endif -%}
-{%- if tag == "blog-page" -%}
-<title>Blog</title>
-<meta name="blog" content="Bailey Cook's blog.">
-{%- endif -%}
+<meta name="keywords" content="plasma, physics, phd, blog, magnetic confinement fusion, MCF, computational physics, programming, Python, Fortran, York, University of York, Fusion CDT, tutoring, teaching, education">
+{%- if title %}
+<title>{{ title }}</title>
+{%- endif %}
+{%- if description %}
+<meta name="description" content="{{ description }}">
+{%- endif %}
+{%- if author %}
+<meta name="author" content="{{ author }}">
+{%- endif %}

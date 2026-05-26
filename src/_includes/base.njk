@@ -1,34 +1,181 @@
----
-templateEngineOverride: njk,md
----
-
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <link rel="icon" type="image/png" href="/img/favicon.png">
   <link rel="stylesheet" href="/styles.css">
-  <link rel="stylesheet" href="/markdown.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" integrity="sha384-GvrOXuhMATgEsSwCs4smul74iXGOixntILdUW9XmUC6+HX0sLNAK3q71HotJqlAn" crossorigin="anonymous">
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js" integrity="sha384-cpW21h6RZv/phavutF+AuVYrr+dA8xD9zs6FwLpaCct6O9ctzYFfFr4dgmgccOTx" crossorigin="anonymous"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
-  <script>
-    let opts = {
-      delimiters: [
-          { left: "$$", right: "$$", display: true },
-          { left: "$", right: "$", display: false },
-      ],
-    };
-    document.addEventListener("DOMContentLoaded", function () {
-      renderMathInElement(document.body, opts);
-    });
-  </script>
   {% include "title-and-meta.njk" %}
+
+  <script>
+    // Single entry-point for all smooth scrolling on this page.
+    function _scrollTo(el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // Footnote links: smooth scroll for both ↓ refs and ↩ backlinks.
+    document.addEventListener('click', function (e) {
+      const link = e.target.closest('a');
+      if (!link) return;
+      const href = link.getAttribute('href') || '';
+      if (!/^#fn/.test(href)) return;
+      const target = document.getElementById(href.slice(1));
+      if (!target) return;
+      e.preventDefault();
+      _scrollTo(target);
+    }, true);
+  </script>
+
+  {% if math %}
+  <script>
+    const _eqBacklinks = new Map();
+    let _eqPreview, _eqHideTimer;
+
+    MathJax = {
+      tex: {
+        tags: 'ams',
+        displayMath: [['\\[', '\\]']],
+        inlineMath:  [['\\(', '\\)']],
+      },
+      chtml: { mtextInheritFont: true },
+    };
+
+    // Extract the equation ID from an \eqref link's href, or return null.
+    function _eqrefTargetId(link) {
+      const raw = link.getAttribute('data-mjx-href') || link.getAttribute('href') || '';
+      const hi = raw.indexOf('#');
+      if (hi < 0) return null;
+      const id = decodeURIComponent(raw.slice(hi + 1));
+      return id.startsWith('mjx-eqn') ? id : null;
+    }
+
+    function _getPreview() {
+      if (!_eqPreview) {
+        _eqPreview = document.createElement('div');
+        _eqPreview.id = 'eq-preview';
+        document.body.appendChild(_eqPreview);
+      }
+      return _eqPreview;
+    }
+
+    // --- Equation hover preview (delegated — no MathJax startup hook needed) ---
+
+    document.addEventListener('mouseover', function (e) {
+      const link = e.target.closest('a');
+      if (!link) return;
+      const targetId = _eqrefTargetId(link);
+      if (!targetId) return;
+      clearTimeout(_eqHideTimer);
+      _showEqPreview(link, targetId);
+    });
+
+    document.addEventListener('mouseout', function (e) {
+      const link = e.target.closest('a');
+      if (!link) return;
+      if (!_eqrefTargetId(link)) return;
+      if (!link.contains(e.relatedTarget)) {
+        _eqHideTimer = setTimeout(() => _getPreview().classList.remove('visible'), 150);
+      }
+    });
+
+    function _showEqPreview(link, targetId) {
+      const anchor = document.getElementById(targetId);
+      if (!anchor) return;
+
+      const eq = anchor.closest('mjx-container') || anchor;
+      const clone = eq.cloneNode(true);
+      clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+
+      const preview = _getPreview();
+      preview.innerHTML = '';
+      preview.appendChild(clone);
+
+      const r = link.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const vw = window.innerWidth;
+      const left = Math.max(10, Math.min(r.left, vw - Math.min(600, vw - 20) - 10));
+      preview.style.left = left + 'px';
+
+      // Prefer below; flip above when near the bottom of the viewport.
+      if (vh - r.bottom < 180 && r.top > 180) {
+        preview.style.top = '';
+        preview.style.bottom = (vh - r.top + 8) + 'px';
+      } else {
+        preview.style.bottom = '';
+        preview.style.top = (r.bottom + 8) + 'px';
+      }
+      preview.classList.add('visible');
+    }
+
+    // --- Click: scroll to equation + add backlink (capture phase) ---
+    //
+    // MathJax v4 renders \eqref{} hrefs as "null#mjx-eqn:label" (malformed).
+    // The a11y module also attaches its own click handler that preventDefault
+    // cannot cancel from the bubble phase. Capture-phase + stopImmediatePropagation
+    // intercepts both problems.
+
+    document.addEventListener('click', function (e) {
+      const link = e.target.closest('a');
+      if (!link) return;
+      const targetId = _eqrefTargetId(link);
+      if (!targetId) return;
+      const target = document.getElementById(targetId);
+      if (!target) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      _scrollTo(target);
+      _updateBacklink(targetId, e.target);
+    }, true);
+
+    function _updateBacklink(equationId, clickTarget) {
+      _eqBacklinks.get(equationId)?.remove();
+
+      const anchor = document.getElementById(equationId);
+      if (!anchor) return;
+      const eq = anchor.closest('mjx-container') || anchor;
+
+      // Use the enclosing math inline span as the stable source anchor.
+      const src = clickTarget.closest('span.math.inline') ||
+                  clickTarget.closest('mjx-container') ||
+                  clickTarget;
+      if (!src.id) src.id = 'eqref-' + Math.random().toString(36).slice(2, 8);
+
+      const bl = document.createElement('a');
+      bl.className = 'eq-backlink';
+      bl.href = '#' + src.id;
+      bl.textContent = '↩';
+      bl.title = 'Return to reference';
+      bl.addEventListener('click', function (e) {
+        e.preventDefault();
+        _eqBacklinks.delete(equationId);
+        bl.remove();
+        const target = document.getElementById(src.id);
+        if (target) _scrollTo(target);
+      });
+
+      // Position in the right margin, vertically aligned with the equation tag.
+      // div.math.block (the dollarmath wrapper) is position:relative via CSS.
+      const parent = eq.parentElement;
+      if (parent) {
+        const parentRect = parent.getBoundingClientRect();
+        const tagRect = anchor.getBoundingClientRect();
+        bl.style.top = (tagRect.top - parentRect.top + tagRect.height / 2) + 'px';
+        bl.style.transform = 'translateY(-50%)';
+        bl.style.left = (eq.getBoundingClientRect().right - parentRect.left + 8) + 'px';
+        parent.appendChild(bl);
+      } else {
+        eq.insertAdjacentElement('afterend', bl);
+      }
+
+      _eqBacklinks.set(equationId, bl);
+    }
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4.1.2/tex-chtml.js"></script>
+  {% endif %}
 </head>
 <body>
   {% include "header.njk" %}
   <main class="wrap">
     {{ content | safe }}
   </main>
-  {# {% include 'footer.njk' %} #}
+  {% include 'footer.njk' %}
 </body>
 </html>

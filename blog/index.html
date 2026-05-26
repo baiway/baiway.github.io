@@ -1,47 +1,36 @@
-
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <link rel="icon" type="image/png" href="/img/favicon.png">
   <link rel="stylesheet" href="/styles.css">
-  <link rel="stylesheet" href="/markdown.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" integrity="sha384-GvrOXuhMATgEsSwCs4smul74iXGOixntILdUW9XmUC6+HX0sLNAK3q71HotJqlAn" crossorigin="anonymous">
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js" integrity="sha384-cpW21h6RZv/phavutF+AuVYrr+dA8xD9zs6FwLpaCct6O9ctzYFfFr4dgmgccOTx" crossorigin="anonymous"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
-  <script>
-    let opts = {
-      delimiters: [
-          { left: "$$", right: "$$", display: true },
-          { left: "$", right: "$", display: false },
-      ],
-    };
-    document.addEventListener("DOMContentLoaded", function () {
-      renderMathInElement(document.body, opts);
-    });
-  </script>
   <link rel="author" href="https://twitter.com/BaileyCook"/>
-
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<meta name="keywords" content="
-plasma, 
-physics, 
-phd,
-blog, 
-magnetic confinement fusion, 
-MCF,
-computational physics,
-programming,
-Python,
-Fortran,
-York,
-University of York,
-Fusion CDT,
-tutoring,
-teaching,
-education
-"><title>Blog</title>
-<meta name="blog" content="Bailey Cook's blog.">
+<meta name="keywords" content="plasma, physics, phd, blog, magnetic confinement fusion, MCF, computational physics, programming, Python, Fortran, York, University of York, Fusion CDT, tutoring, teaching, education">
+<title>Blog</title>
+<meta name="description" content="Bailey Cook&#39;s blog — posts on plasma physics, kinetic theory, and computation.">
+
+
+  <script>
+    // Single entry-point for all smooth scrolling on this page.
+    function _scrollTo(el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // Footnote links: smooth scroll for both ↓ refs and ↩ backlinks.
+    document.addEventListener('click', function (e) {
+      const link = e.target.closest('a');
+      if (!link) return;
+      const href = link.getAttribute('href') || '';
+      if (!/^#fn/.test(href)) return;
+      const target = document.getElementById(href.slice(1));
+      if (!target) return;
+      e.preventDefault();
+      _scrollTo(target);
+    }, true);
+  </script>
+
+  
 </head>
 <body>
   <header class="wrap">
@@ -56,9 +45,20 @@ education
 </header>
 
   <main class="wrap">
-    <section id="post-list"></section>
+    <section id="post-list"><div class="post-row">
+    <p class="post-title">
+      <a href="/blog/posts/equation-numbering-test/">Equation Numbering Test</a>
+    </p>
+    <p class="post-date">
+      <time datetime="2026-05-24">24 May 2026</time>
+    </p>
+    <p class="post-subtitle">A test document exercising automatic equation numbering, cross-referencing, hover previews, and footnotes in a MathJax v4 rendering pipeline.</p>
+  </div></section>
 
   </main>
-  
+  <footer class="wrap">
+  <p class="copyright">&copy Bailey Cook 2026</p>
+</footer>
+
 </body>
 </html>

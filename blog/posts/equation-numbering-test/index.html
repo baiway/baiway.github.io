@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="author" href="https://twitter.com/BaileyCook"/>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="keywords" content="plasma, physics, phd, blog, magnetic confinement fusion, MCF, computational physics, programming, Python, Fortran, York, University of York, Fusion CDT, tutoring, teaching, education">
+<title>Equation Numbering Test</title>
+<meta name="description" content="A test document for equation numbering, cross-referencing, backlinks, hover previews, and footnotes using markdown-it and MathJax v4.">
+
+
+  <script>
+    // Single entry-point for all smooth scrolling on this page.
+    function _scrollTo(el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // Footnote links: smooth scroll for both ↓ refs and ↩ backlinks.
+    document.addEventListener('click', function (e) {
+      const link = e.target.closest('a');
+      if (!link) return;
+      const href = link.getAttribute('href') || '';
+      if (!/^#fn/.test(href)) return;
+      const target = document.getElementById(href.slice(1));
+      if (!target) return;
+      e.preventDefault();
+      _scrollTo(target);
+    }, true);
+  </script>
+
+  
+  <script>
+    const _eqBacklinks = new Map();
+    let _eqPreview, _eqHideTimer;
+
+    MathJax = {
+      tex: {
+        tags: 'ams',
+        displayMath: [['\\[', '\\]']],
+        inlineMath:  [['\\(', '\\)']],
+      },
+      chtml: { mtextInheritFont: true },
+    };
+
+    // Extract the equation ID from an \eqref link's href, or return null.
+    function _eqrefTargetId(link) {
+      const raw = link.getAttribute('data-mjx-href') || link.getAttribute('href') || '';
+      const hi = raw.indexOf('#');
+      if (hi < 0) return null;
+      const id = decodeURIComponent(raw.slice(hi + 1));
+      return id.startsWith('mjx-eqn') ? id : null;
+    }
+
+    function _getPreview() {
+      if (!_eqPreview) {
+        _eqPreview = document.createElement('div');
+        _eqPreview.id = 'eq-preview';
+        document.body.appendChild(_eqPreview);
+      }
+      return _eqPreview;
+    }
+
+    // --- Equation hover preview (delegated — no MathJax startup hook needed) ---
+
+    document.addEventListener('mouseover', function (e) {
+      const link = e.target.closest('a');
+      if (!link) return;
+      const targetId = _eqrefTargetId(link);
+      if (!targetId) return;
+      clearTimeout(_eqHideTimer);
+      _showEqPreview(link, targetId);
+    });
+
+    document.addEventListener('mouseout', function (e) {
+      const link = e.target.closest('a');
+      if (!link) return;
+      if (!_eqrefTargetId(link)) return;
+      if (!link.contains(e.relatedTarget)) {
+        _eqHideTimer = setTimeout(() => _getPreview().classList.remove('visible'), 150);
+      }
+    });
+
+    function _showEqPreview(link, targetId) {
+      const anchor = document.getElementById(targetId);
+      if (!anchor) return;
+
+      const eq = anchor.closest('mjx-container') || anchor;
+      const clone = eq.cloneNode(true);
+      clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+
+      const preview = _getPreview();
+      preview.innerHTML = '';
+      preview.appendChild(clone);
+
+      const r = link.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const vw = window.innerWidth;
+      const left = Math.max(10, Math.min(r.left, vw - Math.min(600, vw - 20) - 10));
+      preview.style.left = left + 'px';
+
+      // Prefer below; flip above when near the bottom of the viewport.
+      if (vh - r.bottom < 180 && r.top > 180) {
+        preview.style.top = '';
+        preview.style.bottom = (vh - r.top + 8) + 'px';
+      } else {
+        preview.style.bottom = '';
+        preview.style.top = (r.bottom + 8) + 'px';
+      }
+      preview.classList.add('visible');
+    }
+
+    // --- Click: scroll to equation + add backlink (capture phase) ---
+    //
+    // MathJax v4 renders \eqref{} hrefs as "null#mjx-eqn:label" (malformed).
+    // The a11y module also attaches its own click handler that preventDefault
+    // cannot cancel from the bubble phase. Capture-phase + stopImmediatePropagation
+    // intercepts both problems.
+
+    document.addEventListener('click', function (e) {
+      const link = e.target.closest('a');
+      if (!link) return;
+      const targetId = _eqrefTargetId(link);
+      if (!targetId) return;
+      const target = document.getElementById(targetId);
+      if (!target) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      _scrollTo(target);
+      _updateBacklink(targetId, e.target);
+    }, true);
+
+    function _updateBacklink(equationId, clickTarget) {
+      _eqBacklinks.get(equationId)?.remove();
+
+      const anchor = document.getElementById(equationId);
+      if (!anchor) return;
+      const eq = anchor.closest('mjx-container') || anchor;
+
+      // Use the enclosing math inline span as the stable source anchor.
+      const src = clickTarget.closest('span.math.inline') ||
+                  clickTarget.closest('mjx-container') ||
+                  clickTarget;
+      if (!src.id) src.id = 'eqref-' + Math.random().toString(36).slice(2, 8);
+
+      const bl = document.createElement('a');
+      bl.className = 'eq-backlink';
+      bl.href = '#' + src.id;
+      bl.textContent = '↩';
+      bl.title = 'Return to reference';
+      bl.addEventListener('click', function (e) {
+        e.preventDefault();
+        _eqBacklinks.delete(equationId);
+        bl.remove();
+        const target = document.getElementById(src.id);
+        if (target) _scrollTo(target);
+      });
+
+      // Position in the right margin, vertically aligned with the equation tag.
+      // div.math.block (the dollarmath wrapper) is position:relative via CSS.
+      const parent = eq.parentElement;
+      if (parent) {
+        const parentRect = parent.getBoundingClientRect();
+        const tagRect = anchor.getBoundingClientRect();
+        bl.style.top = (tagRect.top - parentRect.top + tagRect.height / 2) + 'px';
+        bl.style.transform = 'translateY(-50%)';
+        bl.style.left = (eq.getBoundingClientRect().right - parentRect.left + 8) + 'px';
+        parent.appendChild(bl);
+      } else {
+        eq.insertAdjacentElement('afterend', bl);
+      }
+
+      _eqBacklinks.set(equationId, bl);
+    }
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4.1.2/tex-chtml.js"></script>
+  
+</head>
+<body>
+  <header class="wrap">
+  <nav>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/about/">About</a></li>
+      <li><a href="/tutoring/">Tutoring</a></li>
+      <li><a href="/blog/">Blog</a></li>
+    </ul>
+  </nav>
+</header>
+
+  <main class="wrap">
+    <section class="front-matter">
+  <h1>Equation Numbering Test</h1>
+  <p class="post-subtitle">A test document exercising automatic equation numbering, cross-referencing, hover previews, and footnotes in a MathJax v4 rendering pipeline.</p>
+  <div class="bylines">
+    <div id="publish-date">
+      <h3>Published</h3>
+      <p><time datetime="2026-05-24">24 May 2026</time></p>
+    </div>
+  </div>
+  <div class="post-topics"><span class="post-topic">mathematics</span><span class="post-topic">testing</span></div>
+  <div class="clear"></div>
+</section>
+<section class="article">
+  <p>This document exists to test automatic equation numbering and cross-referencing.
+It is deliberately written to look like a real technical post so that spacing,
+font inheritance, and reference links can all be eyeballed at once. Read it once
+in your published pipeline (MathJax v4) and once in Obsidian, and compare.</p>
+<h2>Numbered equations and backward references</h2>
+<p>We begin with a quantity that everything else will refer back to. The free
+energy<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup> of the system is defined as</p>
+<div class="math block">
+\[\begin{equation}
+W = \frac{1}{2} \sum_{\mathbf{k}} \left| \delta f_{\mathbf{k}} \right|^2
+\label{eq:free-energy}
+\end{equation}\]
+</div>
+<p>This should render as equation (1). Nothing references it yet, but it will be
+referenced later, so the label must survive until the end of the document.</p>
+<p>Next, a second numbered equation. The nonlinear transfer function is written</p>
+<div class="math block">
+\[\begin{equation}
+T_{\mathbf{k}} = \mathrm{Re} \sum_{\mathbf{p}+\mathbf{q}=\mathbf{k}}
+M_{\mathbf{k},\mathbf{p},\mathbf{q}} \, \phi_{\mathbf{p}} \, \phi_{\mathbf{q}}
+\label{eq:transfer}
+\end{equation}\]
+</div>
+<p>That should be equation (2). Now a sentence that refers backward: the free
+energy defined in <span class="math inline">\(\eqref{eq:free-energy}\)</span> is conserved by the nonlinear term
+<span class="math inline">\(\eqref{eq:transfer}\)</span> when summed over all wavenumbers. Both of those references
+should be clickable and should read as “(1)” and “(2)” in the body font.</p>
+<h2>Forward references and an unnumbered equation</h2>
+<p>A forward reference is the harder case, because the target has not yet been
+assigned a number when the reference is encountered. The closure relation
+<span class="math inline">\(\eqref{eq:closure}\)</span> below is the one we will need in the next section — that
+reference points at an equation that has not appeared yet.</p>
+<p>Before we get there, here is a <em>displayed but unnumbered</em> equation. It uses a
+plain environment, so it must not consume a number:</p>
+<div class="math block">
+\[\delta f_{\mathbf{k}} = g_{\mathbf{k}} + \frac{q \, \phi_{\mathbf{k}}}{T} F_0\]
+</div>
+<p>If numbering is working correctly, the equation immediately after this one is
+still (3) and not (4) — the unnumbered line above is skipped by the counter.</p>
+<p>The closure relation is</p>
+<div class="math block">
+\[\begin{equation}
+\delta B_{\parallel, \mathbf{k}} = -\frac{\beta}{2} \, \delta p_{\perp, \mathbf{k}}
+\label{eq:closure}
+\end{equation}\]
+</div>
+<p>This should be equation (3). Scroll back up: the forward reference
+<span class="math inline">\(\eqref{eq:closure}\)</span> in the previous paragraph should now resolve to “(3)” and
+link down to this line.</p>
+<h2>Multi-line alignment</h2>
+<p>Multi-line blocks are where pipelines most often disagree. The following
+<code>align</code> environment should produce two separately numbered lines, (4) and (5),
+each individually referenceable:</p>
+<div class="math block">
+\[\begin{align}
+\frac{\partial g_{\mathbf{k}}}{\partial t}
+  &= -\, i \omega_{\mathbf{k}} \, g_{\mathbf{k}} + N_{\mathbf{k}} \label{eq:gk-evolution} \\
+N_{\mathbf{k}}
+  &= \sum_{\mathbf{p}+\mathbf{q}=\mathbf{k}} M_{\mathbf{k},\mathbf{p},\mathbf{q}}
+     \, g_{\mathbf{p}} \, \phi_{\mathbf{q}} \label{eq:nonlinear-term}
+\end{align}\]
+</div>
+<p>The linear evolution <span class="math inline">\(\eqref{eq:gk-evolution}\)</span> should be (4) and the nonlinear
+term <span class="math inline">\(\eqref{eq:nonlinear-term}\)</span> should be (5).</p>
+<p>Finally, an <code>align</code> block where one line is deliberately suppressed with
+<code>\nonumber</code>. Only the second line should take a number, which should be (6):</p>
+<div class="math block">
+\[\begin{align}
+\phi_{\mathbf{k}} &= \sum_{s} \frac{q_s}{T_s} \int J_0 \, h_{s,\mathbf{k}} \, d^3v \nonumber \\
+\langle T_{\mathbf{k}} \rangle &= \frac{1}{V} \int T_{\mathbf{k}} \, d^3x \label{eq:transfer-avg}
+\end{align}\]
+</div>
+<p>If the counter is correct, the averaged transfer <span class="math inline">\(\eqref{eq:transfer-avg}\)</span> is (6),
+which means the whole document contains exactly six numbered equations.</p>
+<h2>Reference summary</h2>
+<p>As a final check, every label is referenced once more here in a single
+paragraph so a broken link is easy to spot: free energy <span class="math inline">\(\eqref{eq:free-energy}\)</span>,
+transfer function <span class="math inline">\(\eqref{eq:transfer}\)</span>, closure <span class="math inline">\(\eqref{eq:closure}\)</span>, linear
+evolution <span class="math inline">\(\eqref{eq:gk-evolution}\)</span>, nonlinear term <span class="math inline">\(\eqref{eq:nonlinear-term}\)</span>, and
+averaged transfer <span class="math inline">\(\eqref{eq:transfer-avg}\)</span>. Those should read (1) through (6) in
+order, all in the body font, all hyperlinked.</p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>This is the <em>Helmholtz</em> free energy defined through <span class="math inline">\(H =
+U_\mathbf{k} - \sum_s T_s S_{s\mathbf{k}}\)</span>, where <span class="math inline">\(U\)</span> is the ‘fluctuation energy’
+(i.e. internal energy associated with the fluctuations), <span class="math inline">\(T_s\)</span> is the temperature
+of species <span class="math inline">\(s\)</span> and <span class="math inline">\(S_{s\mathbf{k}}\)</span> is the spectral entropy of species <span class="math inline">\(s\)</span>. <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+  <section class="bibliography">
+    <ol id="bibliography">
+    
+    </ol>
+  </section>
+  
+
+</section>
+
+  </main>
+  <footer class="wrap">
+  <p class="copyright">&copy Bailey Cook 2026</p>
+</footer>
+
+</body>
+</html>

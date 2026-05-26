@@ -223,3 +223,62 @@ p.copyright{
     margin: 0 7px;
   }
 }
+
+/* Post subtitle (blog post header and listing) */
+.post-subtitle {
+  font-size: 14px;
+  margin-top: 0;
+  margin-bottom: 8px;
+  line-height: 1.5em;
+}
+
+/* Topic chips in blog post header */
+.post-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.post-topic {
+  background: #f0f0f0;
+  padding: 0.1em 0.5em;
+  border-radius: 3px;
+  font-size: 11px;
+}
+
+/* --- Math (MathJax) --- */
+
+/* dollarmath wraps display math in div.math.block; position:relative is
+   required for the equation backlink to be absolutely positioned inside it. */
+.math.block {
+  position: relative;
+}
+
+/* Equation backlink (↩) placed in the right margin after an \eqref click. */
+.eq-backlink {
+  position: absolute;
+  font-size: 0.8em;
+  color: rgba(0, 0, 0, 0.6);
+  text-decoration: none;
+}
+.eq-backlink:hover {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+/* Hover preview tooltip for \eqref links. */
+#eq-preview {
+  position: fixed;
+  z-index: 9999;
+  background: #fff;
+  border: 1px solid #d0d0d0;
+  border-radius: 6px;
+  padding: 0.25rem 1.5rem 0.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.13);
+  max-width: min(600px, 90vw);
+  overflow-x: auto;
+  display: none;
+  pointer-events: none;
+}
+#eq-preview.visible {
+  display: block;
+}

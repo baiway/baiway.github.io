@@ -115,6 +115,38 @@ main {
   font-size: 14px;
 }
 
+.page table {
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 1em auto;
+  font-size: 14px;
+  line-height: 1.5em;
+}
+
+.page table th,
+.page table td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  border-right: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.page table th:last-child,
+.page table td:last-child {
+  border-right: none;
+}
+
+.page table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.page table th {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
 #name {
   font-size: 36px;
 }

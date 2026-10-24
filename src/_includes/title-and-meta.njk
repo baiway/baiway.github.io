@@ -11,3 +11,27 @@
 {%- if author %}
 <meta name="author" content="{{ author }}">
 {%- endif %}
+{#
+  Open Graph and Twitter card tags, so links shared on LinkedIn etc. show a
+  title, description and preview image. The image is
+  img/social-card-general.png unless a page sets `socialImage` (the tutoring
+  pages do, in tutoring.11tydata.js). The cards are made from the files in
+  design/social-cards/: see the README there.
+#}
+{%- set siteUrl = "https://baileycook.co.uk" %}
+{%- set ogTitle = title if page.url == "/" else title ~ " · Bailey Cook" %}
+{%- set ogImage = siteUrl ~ (socialImage or "/img/social-card-general.png") %}
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Bailey Cook">
+<meta property="og:title" content="{{ ogTitle | e }}">
+{%- if description %}
+<meta property="og:description" content="{{ description | e }}">
+{%- endif %}
+<meta property="og:url" content="{{ siteUrl ~ page.url }}">
+<meta property="og:image" content="{{ ogImage }}">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Bailey Cook">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="{{ ogImage }}">

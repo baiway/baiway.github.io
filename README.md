@@ -38,17 +38,20 @@ The `_site/` directory is gitignored — it is produced by the build and deploye
 │   │       ├── posts.11tydata.js   # Directory defaults: layout, tags, math, publish gating
 │   │       └── *.md                # Blog posts (Markdown + LaTeX)
 │   ├── CV/index.html         # CV
-│   ├── tutoring/index.html   # Tutoring info
+│   ├── tutoring/
+│   │   ├── index.html        # Tutoring info
+│   │   └── tutoring.11tydata.js  # Directory defaults: social preview image
 │   ├── _includes/
 │   │   ├── base.njk          # Root HTML template: CSS, MathJax, interactive JS
 │   │   ├── blog-post.njk     # Post layout: title, subtitle, dates, topic chips
 │   │   ├── header.njk
 │   │   ├── footer.njk
-│   │   └── title-and-meta.njk
+│   │   └── title-and-meta.njk  # <title>, description, social preview tags
 │   ├── scripts/
 │   │   └── make-bibliography.js  # \cite{} → [n] transform; appends reference list
 │   ├── styles.css
 │   └── CNAME
+├── design/social-cards/      # Source for the social preview images (see its README)
 └── img/                      # Static images (passed through to _site/)
 ```
 
